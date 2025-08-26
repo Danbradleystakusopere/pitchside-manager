@@ -4,8 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-sqlalchemy = "*"
 ipython = "*"
+sqlalchemy = "*"
 
 [dev-packages]
 
