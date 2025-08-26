@@ -1,6 +1,4 @@
-
-from .db import session
-from .models import Team, Player, Coach
+from . import crud
 
 def main_menu():
     while True:
@@ -35,7 +33,7 @@ def main_menu():
 
 
 def view_teams():
-    teams = session.query(Team).all()
+    teams = crud.get_all_teams()
     if not teams:
         print("No teams found.")
         return
@@ -49,27 +47,21 @@ def view_teams():
 
 def add_team():
     name = input("Enter team name: ")
-    team = Team(name=name)
-    session.add(team)
-    session.commit()
+    crud.create_team(name)
     print(f"Team '{name}' added.")
 
 def add_player():
     team = choose_team()
     if not team: return
     player_name = input("Enter player name: ")
-    player = Player(name=player_name, team=team)
-    session.add(player)
-    session.commit()
+    crud.create_player(player_name, team)
     print(f"Player '{player_name}' added to {team.name}.")
 
 def add_coach():
     team = choose_team()
     if not team: return
     coach_name = input("Enter coach name: ")
-    coach = Coach(name=coach_name, team=team)
-    session.add(coach)
-    session.commit()
+    crud.create_coach(coach_name, team)
     print(f"Coach '{coach_name}' added to {team.name}.")
 
 
@@ -81,35 +73,23 @@ def update_menu():
     choice = input("Enter choice: ")
 
     if choice == "1":
-        update_team()
+        team = choose_team()
+        if team:
+            new_name = input(f"Enter new name for team '{team.name}': ")
+            crud.update_team(team, new_name)
+            print("Team updated.")
     elif choice == "2":
-        update_player()
+        player = choose_player()
+        if player:
+            new_name = input(f"Enter new name for player '{player.name}': ")
+            crud.update_player(player, new_name)
+            print("Player updated.")
     elif choice == "3":
-        update_coach()
-
-def update_team():
-    team = choose_team()
-    if not team: return
-    new_name = input(f"Enter new name for team '{team.name}': ")
-    team.name = new_name
-    session.commit()
-    print("Team updated.")
-
-def update_player():
-    player = choose_player()
-    if not player: return
-    new_name = input(f"Enter new name for player '{player.name}': ")
-    player.name = new_name
-    session.commit()
-    print("Player updated.")
-
-def update_coach():
-    coach = choose_coach()
-    if not coach: return
-    new_name = input(f"Enter new name for coach '{coach.name}': ")
-    coach.name = new_name
-    session.commit()
-    print("Coach updated.")
+        coach = choose_coach()
+        if coach:
+            new_name = input(f"Enter new name for coach '{coach.name}': ")
+            crud.update_coach(coach, new_name)
+            print("Coach updated.")
 
 
 def delete_menu():
@@ -120,36 +100,24 @@ def delete_menu():
     choice = input("Enter choice: ")
 
     if choice == "1":
-        delete_team()
+        team = choose_team()
+        if team:
+            crud.delete_team(team)
+            print("Team deleted.")
     elif choice == "2":
-        delete_player()
+        player = choose_player()
+        if player:
+            crud.delete_player(player)
+            print("Player deleted.")
     elif choice == "3":
-        delete_coach()
-
-def delete_team():
-    team = choose_team()
-    if not team: return
-    session.delete(team)
-    session.commit()
-    print("Team deleted (along with its players and coaches).")
-
-def delete_player():
-    player = choose_player()
-    if not player: return
-    session.delete(player)
-    session.commit()
-    print("Player deleted.")
-
-def delete_coach():
-    coach = choose_coach()
-    if not coach: return
-    session.delete(coach)
-    session.commit()
-    print("Coach deleted.")
+        coach = choose_coach()
+        if coach:
+            crud.delete_coach(coach)
+            print("Coach deleted.")
 
 
 def choose_team():
-    teams = session.query(Team).all()
+    teams = crud.get_all_teams()
     if not teams:
         print("No teams found.")
         return None
@@ -162,7 +130,7 @@ def choose_team():
     return teams[choice - 1]
 
 def choose_player():
-    players = session.query(Player).all()
+    players = crud.get_all_players()
     if not players:
         print("No players found.")
         return None
@@ -175,7 +143,7 @@ def choose_player():
     return players[choice - 1]
 
 def choose_coach():
-    coaches = session.query(Coach).all()
+    coaches = crud.get_all_coaches()
     if not coaches:
         print("No coaches found.")
         return None
