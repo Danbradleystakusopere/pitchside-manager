@@ -52,9 +52,6 @@ def get_all_matches():
 def get_all_results():
     return session.query(Result).all()
 
-# -------------------------
-# UPDATE
-# -------------------------
 def update_team(team, new_name):
     team.name = new_name
     session.commit()
