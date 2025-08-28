@@ -27,7 +27,7 @@ Exit
 Enter choice:
 
 
-# 1. View 
+# 1. View All Teams
  Displays a list of all teams currently stored in the database.
 
 # 2. Add a new team
