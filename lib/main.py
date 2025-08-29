@@ -1,9 +1,7 @@
 from . import crud
-from colorama import init, Fore, Style  # type: ignore
-
+from colorama import Fore, Style, init # type: ignore
 
 init(autoreset=True)
-
 
 def main_menu():
     while True:
