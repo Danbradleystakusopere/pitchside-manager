@@ -1,17 +1,22 @@
 from . import crud
+from colorama import init, Fore, Style  # type: ignore
+
+
+init(autoreset=True)
+
 
 def main_menu():
     while True:
-        print("\n--- Pitch Side Manager ---")
-        print("1. View all teams")
-        print("2. Add a new team")
-        print("3. Add a player to a team")
-        print("4. Add a coach to a team")
-        print("5. Update a team/coach/player")
-        print("6. Delete a team/coach/player")
-        print("7. Exit")
+        print(Fore.CYAN + "\n--- Pitch Side Manager ---" + Style.RESET_ALL)
+        print(Fore.YELLOW + "1. View all teams" + Style.RESET_ALL)
+        print(Fore.YELLOW + "2. Add a new team" + Style.RESET_ALL)
+        print(Fore.YELLOW + "3. Add a player to a team" + Style.RESET_ALL)
+        print(Fore.YELLOW + "4. Add a coach to a team" + Style.RESET_ALL)
+        print(Fore.YELLOW + "5. Update a team/coach/player" + Style.RESET_ALL)
+        print(Fore.YELLOW + "6. Delete a team/coach/player" + Style.RESET_ALL)
+        print(Fore.YELLOW + "7. Exit" + Style.RESET_ALL)
 
-        choice = input("Enter choice: ")
+        choice = input(Fore.CYAN + "Enter choice: " + Style.RESET_ALL)
 
         if choice == "1":
             view_teams()
@@ -26,134 +31,139 @@ def main_menu():
         elif choice == "6":
             delete_menu()
         elif choice == "7":
-            print("Goodbye!")
+            print(Fore.GREEN + "Goodbye!" + Style.RESET_ALL)
             break
         else:
-            print("Invalid choice, try again.")
+            print(Fore.RED + "Invalid choice, try again." + Style.RESET_ALL)
 
 
 def view_teams():
     teams = crud.get_all_teams()
     if not teams:
-        print("No teams found.")
+        print(Fore.RED + "No teams found." + Style.RESET_ALL)
         return
     for t in teams:
-        print(f"\nTeam: {t.name}")
+        print(Fore.CYAN + f"\nTeam: {t.name}" + Style.RESET_ALL)
         for c in t.coaches:
-            print(f"  Coach: {c.name}")
+            print(Fore.MAGENTA + f"  Coach: {c.name}" + Style.RESET_ALL)
         for p in t.players:
-            print(f"  Player: {p.name}")
+            print(Fore.BLUE + f"  Player: {p.name}" + Style.RESET_ALL)
 
 
 def add_team():
-    name = input("Enter team name: ")
+    name = input(Fore.CYAN + "Enter team name: " + Style.RESET_ALL)
     crud.create_team(name)
-    print(f"Team '{name}' added.")
+    print(Fore.GREEN + f"Team '{name}' added." + Style.RESET_ALL)
+
 
 def add_player():
     team = choose_team()
     if not team: return
-    player_name = input("Enter player name: ")
+    player_name = input(Fore.CYAN + "Enter player name: " + Style.RESET_ALL)
     crud.create_player(player_name, team)
-    print(f"Player '{player_name}' added to {team.name}.")
+    print(Fore.GREEN + f"Player '{player_name}' added to {team.name}." + Style.RESET_ALL)
+
 
 def add_coach():
     team = choose_team()
     if not team: return
-    coach_name = input("Enter coach name: ")
+    coach_name = input(Fore.CYAN + "Enter coach name: " + Style.RESET_ALL)
     crud.create_coach(coach_name, team)
-    print(f"Coach '{coach_name}' added to {team.name}.")
+    print(Fore.GREEN + f"Coach '{coach_name}' added to {team.name}." + Style.RESET_ALL)
 
 
 def update_menu():
-    print("\n--- Update Menu ---")
-    print("1. Update Team name")
-    print("2. Update Player name")
-    print("3. Update Coach name")
-    choice = input("Enter choice: ")
+    print(Fore.CYAN + "\n--- Update Menu ---" + Style.RESET_ALL)
+    print(Fore.YELLOW + "1. Update Team name" + Style.RESET_ALL)
+    print(Fore.YELLOW + "2. Update Player name" + Style.RESET_ALL)
+    print(Fore.YELLOW + "3. Update Coach name" + Style.RESET_ALL)
+    choice = input(Fore.CYAN + "Enter choice: " + Style.RESET_ALL)
 
     if choice == "1":
         team = choose_team()
         if team:
-            new_name = input(f"Enter new name for team '{team.name}': ")
+            new_name = input(Fore.CYAN + f"Enter new name for team '{team.name}': " + Style.RESET_ALL)
             crud.update_team(team, new_name)
-            print("Team updated.")
+            print(Fore.GREEN + "Team updated." + Style.RESET_ALL)
     elif choice == "2":
         player = choose_player()
         if player:
-            new_name = input(f"Enter new name for player '{player.name}': ")
+            new_name = input(Fore.CYAN + f"Enter new name for player '{player.name}': " + Style.RESET_ALL)
             crud.update_player(player, new_name)
-            print("Player updated.")
+            print(Fore.GREEN + "Player updated." + Style.RESET_ALL)
     elif choice == "3":
         coach = choose_coach()
         if coach:
-            new_name = input(f"Enter new name for coach '{coach.name}': ")
+            new_name = input(Fore.CYAN + f"Enter new name for coach '{coach.name}': " + Style.RESET_ALL)
             crud.update_coach(coach, new_name)
-            print("Coach updated.")
+            print(Fore.GREEN + "Coach updated." + Style.RESET_ALL)
 
 
 def delete_menu():
-    print("\n--- Delete Menu ---")
-    print("1. Delete Team")
-    print("2. Delete Player")
-    print("3. Delete Coach")
-    choice = input("Enter choice: ")
+    print(Fore.CYAN + "\n--- Delete Menu ---" + Style.RESET_ALL)
+    print(Fore.YELLOW + "1. Delete Team" + Style.RESET_ALL)
+    print(Fore.YELLOW + "2. Delete Player" + Style.RESET_ALL)
+    print(Fore.YELLOW + "3. Delete Coach" + Style.RESET_ALL)
+    choice = input(Fore.CYAN + "Enter choice: " + Style.RESET_ALL)
 
     if choice == "1":
         team = choose_team()
         if team:
             crud.delete_team(team)
-            print("Team deleted.")
+            print(Fore.RED + "Team deleted." + Style.RESET_ALL)
     elif choice == "2":
         player = choose_player()
         if player:
             crud.delete_player(player)
-            print("Player deleted.")
+            print(Fore.RED + "Player deleted." + Style.RESET_ALL)
     elif choice == "3":
         coach = choose_coach()
         if coach:
             crud.delete_coach(coach)
-            print("Coach deleted.")
+            print(Fore.RED + "Coach deleted." + Style.RESET_ALL)
 
 
 def choose_team():
     teams = crud.get_all_teams()
     if not teams:
-        print("No teams found.")
+        print(Fore.RED + "No teams found." + Style.RESET_ALL)
         return None
     for i, t in enumerate(teams, 1):
-        print(f"{i}. {t.name}")
-    choice = int(input("Select team number: "))
+        print(Fore.YELLOW + f"{i}. {t.name}" + Style.RESET_ALL)
+    choice = int(input(Fore.CYAN + "Select team number: " + Style.RESET_ALL))
     if choice < 1 or choice > len(teams):
-        print("Invalid choice.")
+        print(Fore.RED + "Invalid choice." + Style.RESET_ALL)
         return None
     return teams[choice - 1]
+
 
 def choose_player():
     players = crud.get_all_players()
     if not players:
-        print("No players found.")
+        print(Fore.RED + "No players found." + Style.RESET_ALL)
         return None
     for i, p in enumerate(players, 1):
-        print(f"{i}. {p.name} (Team: {p.team.name})")
-    choice = int(input("Select player number: "))
+        print(Fore.YELLOW + f"{i}. {p.name} (Team: {p.team.name})" + Style.RESET_ALL)
+    choice = int(input(Fore.CYAN + "Select player number: " + Style.RESET_ALL))
     if choice < 1 or choice > len(players):
-        print("Invalid choice.")
+        print(Fore.RED + "Invalid choice." + Style.RESET_ALL)
         return None
     return players[choice - 1]
+
 
 def choose_coach():
     coaches = crud.get_all_coaches()
     if not coaches:
-        print("No coaches found.")
+        print(Fore.RED + "No coaches found." + Style.RESET_ALL)
         return None
     for i, c in enumerate(coaches, 1):
-        print(f"{i}. {c.name} (Team: {c.team.name})")
-    choice = int(input("Select coach number: "))
+        print(Fore.YELLOW + f"{i}. {c.name} (Team: {c.team.name})" + Style.RESET_ALL)
+    choice = int(input(Fore.CYAN + "Select coach number: " + Style.RESET_ALL))
     if choice < 1 or choice > len(coaches):
-        print("Invalid choice.")
+        print(Fore.RED + "Invalid choice." + Style.RESET_ALL)
         return None
     return coaches[choice - 1]
+
 
 if __name__ == "__main__":
     main_menu()
